@@ -1,0 +1,37 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+	int data;
+	struct node *next;//鏈節成員，存放下一個節點的指標 
+};
+typedef struct node NODE;//將struct node定義成NODE 
+int main(){
+	int num;
+	NODE *frist,*current,*previous;//宣告3個指向NODE的指標 
+	printf("輸入節點個數:");
+	scanf("%d",&num);
+	int i;
+	for(i=0;i<num;i++){
+		current = (NODE*)malloc(sizeof(NODE));
+		printf("Data for node %d:",i+1);
+		scanf("%d",&(current->data));
+		
+		if(i==0){
+			frist = current;//frist指標指向目前節點 
+		} else{
+			previous->next = current;//前一個節點的next指向目前指標 
+		}
+		current->next=NULL;
+		previous = current;//前一個節點設成目前節點 
+	}
+	current = frist;//設定current為第一節點 
+	while(current!=NULL){
+		printf("address=%p",current);//%p 這是一個用來印記憶位址的參數
+		printf("\tdata=%3d",current->data);
+		printf("\tnext=%p",current->next);//%p 這是一個用來印記憶位址的參數
+		printf("\n");
+		current=current->next;//指向下一個記憶體位址到NULL為止	
+	} 
+	system("pause");
+	return 0;
+}
