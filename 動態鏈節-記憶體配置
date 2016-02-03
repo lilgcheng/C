@@ -1,0 +1,32 @@
+
+#include<stdio.h>
+#include<stdlib.h>
+int main(){
+	int num,i;
+	struct student{
+		char name[10];
+		int score;
+	}*ptr;
+	printf("有幾個學生:\n");
+	scanf("%d",&num);
+	
+	ptr=(struct student*)malloc(num*sizeof(struct student));//給於num個 struct student記憶體空間 
+	
+	for(i=0;i<3;i++){
+//		fflush(stdin);
+		printf("輸入學生姓名%d:",i);
+		scanf("%s",&(ptr+i)->name);//scanf不能加'\n' 
+		
+		printf("輸入學生成績:");
+		scanf("%d",&(ptr+i)->score);
+	}
+	
+	for(i=0;i<3;i++){
+		printf("ptr%d(name)=%s\n",i,(ptr+i)->name);
+		printf("ptr%d(score)=%d\n",i,(ptr+i)->score);	
+	}
+	
+	free(ptr);//釋放記憶體 
+	system("pause");
+	return 0;
+}
