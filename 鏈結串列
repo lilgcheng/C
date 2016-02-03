@@ -1,0 +1,27 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+	int data;
+	struct node *next;//鏈節成員，存放下一個節點的指標 
+};
+typedef struct node NODE;//將struct node定義成NODE 
+int main(){
+	NODE a,b,c;//宣告a,b,c為NODE型態
+	NODE *ptr = &a;//宣告ptr並指向節點a
+	a.data=10;
+	a.next=&b;
+	b.data=20;
+	b.next=&c;
+	c.data=30;
+	c.next=NULL;
+	
+	while(ptr!=NULL){
+		printf("address=%p",ptr);//%p 這是一個用來印記憶位址的參數
+		printf("\tdata=%3d",ptr->data);
+		printf("\tnext=%p",ptr->next);//%p 這是一個用來印記憶位址的參數
+		printf("\n");
+		ptr=ptr->next;//指向下一個記憶體位址到NULL為止	
+	} 
+	system("pause");
+	return 0;
+}
