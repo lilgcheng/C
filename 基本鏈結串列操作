@@ -1,0 +1,128 @@
+#include<stdio.h>
+#include<stdlib.h>
+	
+struct node{
+	int data;
+	struct node *next;//鏈節成員，存放下一個節點的指標 
+};
+typedef struct node NODE;//將struct node定義成NODE 
+
+NODE* createList(int *,int );
+void printList(NODE*);
+void freeList(NODE*);
+void insert(NODE *node,int item);
+
+NODE* search(NODE* frist ,int item);
+NODE* delect(NODE *frist,NODE *node );
+
+int main(){
+	NODE *frist,*node;
+	int arr[]={14,27,32,46};
+	frist = createList(arr,4);
+	printList(frist);
+//	printf("%p\n",search(frist ,32));
+	
+	insert(frist+4,50);//一個鏈結有data跟node所以放入位置要+2,+4,+6....etc 
+	printf("set1=差入後\n"); 
+	printList(frist);
+	
+	printf("收尋:\n");
+	printf("%p\n",search(frist ,14));
+	
+	printf("\n刪除後\n");
+	node=delect(frist,frist);//刪除後的新串列 
+	printList(node);
+	
+	insert(node,14);//一個鏈結有data跟node所以放入位置要+2,+4,+6....etc 
+	printf("set2=差入後\n"); 
+	printList(node);
+
+//	freeList(frist);
+	system("pause");
+	return 0;
+}
+
+NODE* createList(int *arr,int len){//建立函數 
+	int i;
+	NODE *current,*frist,*preivous;
+	for(i=0;i<len;i++){
+		current=(NODE*)malloc(sizeof(NODE));
+		current->data=arr[i];
+		if(i==0){
+			frist = current;
+		}else{
+			preivous->next = current;//把前一個的節點next指向目前節點	 
+		}
+		current->next=NULL;
+		preivous = current;
+	}
+	return frist;
+}
+
+void printList(NODE* frist){
+	NODE* node = frist;
+
+	if(frist == NULL){
+		printf("List is empty!\n");
+	}else{
+		while(node!=NULL){
+			printf("位址%p->存值%d\t",node,node->data);
+			node = node->next;
+			printf("下一個位址%p\n",node);
+		}
+		printf("\n");
+	}
+}
+
+void freeList(NODE* frist){
+	NODE *current,*tmp;
+	current=frist;
+	while(current!=NULL){
+		tmp = current;//先暫存目前的節點 
+		current = current->next;//current指向下一個節點 
+		free(tmp);//將暫存的節點釋放掉 
+	}
+	printf("\n");
+}
+
+NODE *search(NODE* frist ,int item){
+//	printf("item=%d\n",item);
+	NODE *node=frist;
+	while(node!=NULL){
+		printf("node->data=%d\n",node->data);
+		if(node->data==item){
+			return node;
+		}else{
+			node=node->next;//否者指標指向下一個節點 
+		}
+	} 
+	return NULL;//找不符合的節點，則傳回NULL 
+}
+
+void insert(NODE *node,int item){
+	NODE *newnode;//定義新節點
+	newnode=(NODE*)malloc(sizeof(NODE));
+	newnode->data = item;//將新節點data設為item 
+	newnode->next = node->next;//將新節點的下一個節點設為原節點下一個 
+	node->next=newnode;//將原節點的next指向新節點 
+	 
+}
+
+NODE* delect(NODE *frist,NODE *node ){
+	NODE *ptr=frist;
+	if(frist==NULL){//如果串列是空的 
+		printf("Nothing to del\n");
+		return NULL;
+	}
+	if(node==frist){
+		frist=frist->next;//如果刪除的是第一個節點,者指向下一個節點
+		free(node);
+	}else{
+		while(ptr->next!=node){//找到刪除節點的前一個節點 
+			ptr= ptr->next;
+		}
+		ptr->next=node->next;//重新設定ptr的下一個節點 
+	}
+	
+	return frist;
+}
