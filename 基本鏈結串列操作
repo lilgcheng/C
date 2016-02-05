@@ -37,7 +37,7 @@ int main(){
 	printf("set2=差入後\n"); 
 	printList(node);
 
-//	freeList(frist);
+	freeList(frist);
 	system("pause");
 	return 0;
 }
@@ -109,7 +109,7 @@ void insert(NODE *node,int item){
 }
 
 NODE* delect(NODE *frist,NODE *node ){
-	NODE *ptr=frist;
+	
 	if(frist==NULL){//如果串列是空的 
 		printf("Nothing to del\n");
 		return NULL;
@@ -118,6 +118,7 @@ NODE* delect(NODE *frist,NODE *node ){
 		frist=frist->next;//如果刪除的是第一個節點,者指向下一個節點
 		free(node);
 	}else{
+		NODE *ptr=frist;
 		while(ptr->next!=node){//找到刪除節點的前一個節點 
 			ptr= ptr->next;
 		}
