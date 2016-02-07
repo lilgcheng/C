@@ -1,0 +1,127 @@
+#include<stdio.h>
+#include<stdlib.h>
+//宣告資料結構 
+typedef struct Node{
+	int data;
+    struct Node *next;
+}node;
+
+void insert(node *pointer, int data);
+void print(node *start,node *pointer);
+void deleteList(node *pointer, int data);
+node* find(node *pointer, int key);
+int main(){
+	/*head指向連結的第一個節點 
+	  tail指向連結的最後一個節點*/
+	node *head,*tail,*status;
+	head = (node*)malloc(sizeof(node));
+	tail = head;
+	
+	//最後節點下一個指向第一個節點形成環狀串列 
+	tail->next = head;
+	       
+	printf("1. Insert\n");
+    printf("2. DeleteList\n");
+    printf("3. Print\n");
+    printf("4. Find\n");
+	
+	int select=0;
+	while(1){
+		scanf("%d",&select);
+		switch(select){
+			case 1:
+				int data;
+				printf("輸入要加入的數值:\n");
+		        scanf("%d",&data);
+		        insert(head,data);
+		    break;
+
+			case 2:
+				int item;
+				printf("輸入要刪除的數值:\n");
+		        scanf("%d",&item);
+		        deleteList(head,item);
+		    break;
+		    
+		    case 3:
+//				printf("The list is ");
+                print(head,head->next);
+                printf("\n");
+		    break;
+		    
+		    case 4:
+                int search;
+				printf("輸入要收尋的數值:\n");
+                scanf("%d",&search);
+                status = find(head,search);
+                if(status!=NULL){
+                    printf("Element Found\n");
+                    printf("找到位置=%p\n",status);
+                }else{
+                	printf("Element Not Found\n");
+				}
+		}
+	}
+	system("pause");
+	return 0;
+}
+
+//插入 
+void insert(node *pointer, int data){
+	node *head;
+	head = pointer;
+	//遍歷鍊節，直到我們遇到的最後一個節點
+	while(pointer->next!=head){
+		pointer = pointer->next;//最後節點 
+	} 
+    pointer->next = (node *)malloc(sizeof(node));//給於pointer下一個節點空間 
+    pointer = pointer->next;//將最後節點指向新節點pointer->next 
+    pointer->data = data;
+    pointer->next = head;//將新節點的指標指向串列第一個節點 
+}
+
+//印出 
+//head->Original->....->final->head
+void print(node *head,node *pointer){//pointer = head->next 
+    if(pointer==head){
+    	printf("tail = head = %p ",pointer);
+        return;
+	}
+	printf("位址 = %p  ",pointer);
+    printf("值 = %d \n",pointer->data);
+	print(head,pointer->next);
+} 
+
+//刪除 
+void deleteList(node *pointer, int data){
+	node *start = pointer;
+	//從 pointer->next找到個開始節點 ，有無收尋資料 ，收尋到資料紀錄在pointer 
+	while(pointer->next!=start && (pointer->next)->data != data){
+        pointer = pointer -> next;//找尋刪除的前一個節點 
+        printf("位址= %p 沒有此元素\n",pointer);
+    }	
+    printf("要刪除的位址= %p \n",pointer);
+    if(pointer->next==start){
+        printf("Element %d is not present in the list\n",data);
+        return;
+    }
+    node *temp;
+    temp = pointer -> next;//temp暫存要被刪除的節點 
+	pointer->next = temp->next;//將前一個節點指向temp的下一個節點 
+	free(temp);//釋放刪除點位址 
+} 
+
+//尋找
+node* find(node *pointer, int key){//傳回指標型態要定義 node*
+    node *start = pointer;
+    pointer =  pointer -> next; //第一個節點是虛擬節點
+    /* Iterate through the entire linked list and search for the key. */
+    while(pointer!=start){
+        if(pointer->data == key){
+			return pointer;//傳回收尋到資料的位址 
+		}     
+         pointer = pointer -> next;//Search in the next node.
+   }
+   /*Key is not found */
+    return NULL;
+} 
