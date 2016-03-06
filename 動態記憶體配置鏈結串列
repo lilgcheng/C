@@ -27,7 +27,7 @@ int main(){
 	current = frist;//設定current為第一節點 
 	while(current!=NULL){
 		printf("address=%p",current);//%p 這是一個用來印記憶位址的參數
-		printf("\tdata=%3d",current->data);
+		printf("\tdata=%3d",current->data);aaa
 		printf("\tnext=%p",current->next);//%p 這是一個用來印記憶位址的參數
 		printf("\n");
 		current=current->next;//指向下一個記憶體位址到NULL為止	
