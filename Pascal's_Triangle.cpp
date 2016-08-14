@@ -6,47 +6,47 @@ int main()
 {
 
 	int h;
-	int **num;
+	int **num,**answer;
 	scanf("%d",&h);
 	num = (int**)malloc(sizeof(int*)*h);
-	generate(h,num);
+	
+	answer = (int**)malloc(sizeof(int*)*h);
+	answer = generate(h,num);
+	int i,j;
+	for(i=0;i<h;i++){
+		for(j=0;j<=i;j++){
+			printf("%d",answer[i][j]);
+		}
+		printf("\n");
+	}
 	system("pause");
 	return 0;
 }
-
 int** generate(int numRows, int** columnSizes) {
-    int i,j;
-     if (numRows <= 0) {
+    if (numRows <= 0) {//0行 傳回空值 
         *columnSizes = NULL;
         return NULL;
     }
-    
-	for(i=0;i<=numRows-1;i++){
-		columnSizes[i]=(int*)malloc(sizeof(int)*5);
-		for(j=0;j<=i;j++){
-			columnSizes[i][j] = answer(i,j);
-//			printf("[%d][%d] = ",i,j);
-			printf("%d",columnSizes[i][j]);
-		}
-		printf("\n");
-	} 
-	return columnSizes;
-}
 
-int answer(int n,int m){
-	int i,j,sum1=1,sum2=1,sum3=1,answer=0;
-	for(i=n;i>=1;i--){
-		sum1 = sum1*i;
-	}
-//	printf("%d\n",sum1);
-	for(i=m;i>=1;i--){
-		sum2 = sum2*i;
-	}
-//	printf("%d\n",sum2);
-	for(i=(n-m);i>=1;i--){
-		sum3 = sum3*i;
-	}
-//	printf("%d\n",sum3);
-	answer = sum1/(sum2*sum3);
-	return answer;
+    int* columns = (int*)malloc(sizeof(int) * numRows);//一維陣列 
+    columns[0] = 1;
+
+    int** pascal = (int**)malloc(sizeof(int*) * numRows);//二維陣列
+    pascal[0] = (int*)malloc(sizeof(int));
+    pascal[0][0] = 1;//第一行 預設 
+
+    for (int i = 1; i < numRows; ++i) {
+        columns[i] = i + 1;
+        printf("columns[%d]=%d \n",i,columns[i]);
+        pascal[i] = (int*)malloc(sizeof(int) * columns[i]);//取得空間 
+        pascal[i][0] = 1;
+        printf("pascal[%d][0]=%d \n",i,pascal[i][0]);
+        for (int j = 1; j < i; ++j) {
+            pascal[i][j] = pascal[i-1][j-1] + pascal[i-1][j];
+        }
+        pascal[i][i] = 1;
+    }
+
+    *columnSizes = columns;
+    return pascal;
 }
