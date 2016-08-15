@@ -1,8 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 struct NumArray {
-	int data;
-    struct NumArray *next;
+ 	int size;
+    int *sum;
 };
 typedef struct NumArray NODE;
 struct NumArray* NumArrayCreate(int* nums, int numsSize);
@@ -13,7 +13,7 @@ int main()
 {
 	int nums[6]={-2,0,3,-5,2,-1};
 	NODE *head = NumArrayCreate(nums,6);
-	printList(head);
+//	printList(head);
 	int answer = sumRange(head,0,5);
 	printf("answer = %d\n",answer);
 	system("pause");
@@ -24,58 +24,37 @@ int main()
 
 /** Initialize your data structure here. */
 struct NumArray* NumArrayCreate(int* nums, int numsSize) {
+    struct NumArray *array;
     int i;
-	NODE *current,*frist,*preivous;
-	if(nums == NULL){
-		printf("List is empty!\n");
-	}
-	for(i=0;i<numsSize;i++){
-		current=(NODE*)malloc(sizeof(NODE));
-		current->data=nums[i];
-		if(i==0){//存儲 
-			frist = current;
-		}else{
-			preivous->next = current;//把前一個的節點next指向目前節點	 
-		}
-		current->next=NULL;
-		preivous = current;
-	}
-	return frist;
+
+    array = (struct NumArray*)calloc(1, sizeof(struct NumArray));
+    array->sum = (int *) calloc(numsSize+1, sizeof(int));
+    array->size = numsSize;
+    array->sum[0] = 0;
+    for(i = 0; i < numsSize; i++){
+            array->sum[i+1] = nums[i] + array->sum[i];/*儲存總和 EX:array->sum[1] = nums[0]+array->sum[0] 
+																	array->sum[2] = nums[1]+array->sum[1]*/
+            printf("%d-%3d\n",i+1,array->sum[i+1]);
+    }
+    printf("\n");
+    return array;
 }
 
 int sumRange(struct NumArray* numArray, int i, int j) {
-	int len =j-i;
-    int sum=0;
-    NODE *ptr1;
-	ptr1 =numArray;
-    int k;
-    for(k=i;i>0;i--){
-    	ptr1 = ptr1->next;
-	}
-//    printf("%d",ptr1->data);
- 
-    for(j=len;j>=0;j--){
-	    printf("%3d",ptr1->data);
-	    sum += ptr1->data;
-    	ptr1 = ptr1->next;
-	}
-	
-//  
+	int sum = 0;
+    if(!numArray)
+        return 0;
+    sum = numArray->sum[j+1] - numArray->sum[i];
+    return sum;	
   return sum;
 }
 /** Deallocates memory previously allocated for the data structure. */
 void NumArrayFree(struct NumArray* numArray) {
+    free(numArray->sum);
     free(numArray);
 }
+//
 
-void printList(NODE* frist){
-	NODE *p = frist;
-	while(p!=NULL){
-		printf("%3d",p->data);
-		p=p->next;
-	}
-	printf("\n");
-}
 // Your NumArray object will be instantiated and called as such:
 // struct NumArray* numArray = NumArrayCreate(nums, numsSize);
 // sumRange(numArray, 0, 1);
